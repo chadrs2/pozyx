@@ -16,7 +16,7 @@ class Tag2AnchorDistance():
         self.pozyx.clearDevices(remote_id=remote_id)
         
         # Add anchor(s) to remote device
-        anchor1 = DeviceCoordinates(anchor_id,1,Coordinates(0,0,0))
+        anchor1 = DeviceCoordinates(anchor_id,0,Coordinates(0,0,0))
         self.pozyx.addDevice(anchor1,remote_id)
 
         # State Variables
@@ -106,17 +106,10 @@ if __name__ == "__main__":
         quit()
     
     # Device ID Config
-    remote_id = None #0x7607                 # remote tag device network ID
+    remote_id = 0x7607                 # remote tag device network ID
     anchor1_id = 0x7612                  # anchor device network ID
     
     pozyx = PozyxSerial(serial_port)
-
-    # dd = DeviceDetails()
-    # pozyx.getDeviceDetails(dd)
-    # print("Master Details:",dd)
-    # dd = DeviceDetails()
-    # pozyx.getDeviceDetails(dd,remote_id)
-    # print("Tag Details:",dd)
 
     # Change UWB settings:
     ''' HOW TO CHANGE UWB SETTINGS:
@@ -144,17 +137,18 @@ if __name__ == "__main__":
     # Saves the device's UWB settings
     pozyx.saveUWBSettings()
     '''
+    pozyx.clearDevices(remote_id)
+    pozyx.clearDevices()
+    pozyx.addDevice(DeviceCoordinates(remote_id,1,Coordinates(0,0,0)))
     # WORKING SETTINGS: UWBSettings(channel=5,bitrate=0,prf=2,plen=0x08,gain_db=11.5)
     # uwb_settings = UWBSettings(channel=5,bitrate=0,prf=2,plen=0x08,gain_db=11.5)
-    uwb_settings = UWBSettings(channel=5,bitrate=0,prf=2,plen=0x08,gain_db=11.5)
-    status = pozyx.setUWBSettings(uwb_settings=uwb_settings,remote_id=remote_id)
-    status &= pozyx.setUWBSettings(uwb_settings=uwb_settings)
-    # status = pozyx.setUWBChannel(2,remote_id=remote_id)
-    # status = pozyx.setUWBChannel(2)
-    # status = pozyx.clearConfiguration()
-    # status &= pozyx.clearConfiguration(remote_id)
-    # # status = POZYX_SUCCESS
-    # if status == POZYX_SUCCESS:
+    # uwb_settings = UWBSettings(channel=2,bitrate=0,prf=2,plen=0x08,gain_db=15.5)
+    # status = pozyx.setUWBSettings(uwb_settings=uwb_settings,remote_id=remote_id)
+    # status &= pozyx.setUWBSettings(uwb_settings=uwb_settings)
+
+    status = pozyx.setUWBChannel(2,remote_id=remote_id)
+    status &= pozyx.setUWBChannel(2)
+
     # Get and Print UWB Settings
     curr_master_uwb_settings = UWBSettings()
     curr_tag_uwb_settings = UWBSettings()
@@ -172,9 +166,6 @@ if __name__ == "__main__":
     else:
         print("UWB Setting Retrieval Failed!")
         quit()
-    # else:
-    #     print("UWB Settings Setting Failed!")
-    #     quit()
     
     
     t2a = Tag2AnchorDistance(pozyx,remote_id,anchor1_id)

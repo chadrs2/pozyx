@@ -15,8 +15,8 @@ class Tag2AnchorsDistance():
         self.pozyx.clearDevices(remote_id=remote_id)
         
         # Add anchor(s) to remote device
-        anchor1 = DeviceCoordinates(anchor1_id,1,Coordinates(0,0,0))
-        anchor2 = DeviceCoordinates(anchor2_id,1,Coordinates(3000,0,0)) #offset anchors by 1.5 meters
+        anchor1 = DeviceCoordinates(anchor1_id,0,Coordinates(0,0,0))
+        anchor2 = DeviceCoordinates(anchor2_id,0,Coordinates(3000,0,0)) #offset anchors by 1.5 meters
         self.pozyx.addDevice(anchor1,remote_id)
         self.pozyx.addDevice(anchor2,remote_id)
 
