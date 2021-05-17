@@ -53,8 +53,9 @@ class Tag2AnchorDistance():
             print("Distance(m):",self.device_range.distance/1000)
             if self.device_range.distance > self.max_dist:
                 self.max_dist = self.device_range.distance
-            self.list_of_times.append(self.device_range.timestamp-self.init_time)
-            self.list_of_dist.append(self.device_range.distance)
+            if self.device_range.timestamp - self.init_time > 0. and self.device_range.distance/1000 < 200.:
+                self.list_of_times.append(self.device_range.timestamp-self.init_time)
+                self.list_of_dist.append(self.device_range.distance)
         else:
             error_code = SingleRegister()
             status = self.pozyx.getErrorCode(error_code)
@@ -71,7 +72,8 @@ class Tag2AnchorDistance():
 
         # Plot Results
         fig = plt.figure(1)
-        plt.plot(t/1000,distance_values/1000)
+        # plt.plot(t/1000,distance_values/1000)
+        plt.scatter(t/1000,distance_values/1000,marker=".")
         plt.title("1 Tag to 1 Anchor: Max Distance Test")
         plt.xlabel("Time (s)")
         plt.ylabel("Distance (m)")
@@ -137,22 +139,33 @@ if __name__ == "__main__":
     # Saves the device's UWB settings
     pozyx.saveUWBSettings()
     '''
-    pozyx.clearDevices(remote_id)
-    pozyx.clearDevices()
-    pozyx.addDevice(DeviceCoordinates(remote_id,1,Coordinates(0,0,0)))
-    # WORKING SETTINGS: UWBSettings(channel=5,bitrate=0,prf=2,plen=0x08,gain_db=11.5)
+    # # Configure Network
+    # uwb_settings = UWBSettings(channel=5,bitrate=0,prf=2,plen=0x08,gain_db=11.5)
+    # status = pozyx.setUWBSettings(uwb_settings=uwb_settings,remote_id=remote_id)
+    # status &= pozyx.setUWBSettings(uwb_settings=uwb_settings)
+    # pozyx.doDiscoveryAnchors()
+
+    # # pozyx.clearDevices(remote_id)
+    # # pozyx.clearDevices()
+    # # pozyx.addDevice(DeviceCoordinates(remote_id,1,Coordinates(0,0,0)))
+    # anchor = DeviceCoordinates(anchor1_id, 0, Coordinates(0,0,0))
+    # pozyx.addDevice(anchor,remote_id=remote_id)
+    # anchor = DeviceCoordinates(anchor1_id, 0, Coordinates(0,0,0))
+    # pozyx.addDevice(anchor)
+    # #pozyx.saveNetwork()
+    
+    # Change Settings    
     # uwb_settings = UWBSettings(channel=5,bitrate=0,prf=2,plen=0x08,gain_db=11.5)
     # uwb_settings = UWBSettings(channel=2,bitrate=0,prf=2,plen=0x08,gain_db=15.5)
     # status = pozyx.setUWBSettings(uwb_settings=uwb_settings,remote_id=remote_id)
     # status &= pozyx.setUWBSettings(uwb_settings=uwb_settings)
-
-    status = pozyx.setUWBChannel(2,remote_id=remote_id)
-    status &= pozyx.setUWBChannel(2)
+    #pozyx.saveUWBSettings()
+    #pozyx.saveUWBSettings(remote_id)
 
     # Get and Print UWB Settings
     curr_master_uwb_settings = UWBSettings()
     curr_tag_uwb_settings = UWBSettings()
-    status &= pozyx.getUWBSettings(curr_master_uwb_settings)
+    status = pozyx.getUWBSettings(curr_master_uwb_settings)
     status &= pozyx.getUWBSettings(curr_tag_uwb_settings,remote_id)
     if status == POZYX_SUCCESS:
         print('Master UWB Settings => Channel: {}, Bitrate: {}, PRF: {}, Plen: {}, Gain(dB): {}'.\
