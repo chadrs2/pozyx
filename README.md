@@ -5,7 +5,7 @@
 * [Software Installation](#software-installation)
 * [Hardware Setup](#faq)
 * [Example Test Case](#known-bugs)
-* [Questions](#questions)
+* [Important Links](#important-links)
 
 ## Requirements
 * [Ubuntu 18.04](https://ubuntu.com/download/desktop)
