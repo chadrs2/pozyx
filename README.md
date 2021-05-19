@@ -102,10 +102,12 @@ pozyx.addDevice(DeviceCoordinates(anchor_id,0,Coordinates(0,0,0)),remote_id=slav
 6. Get the range measurement between two sensors:
 ```
 device_range = DeviceRange()
+
 # Getting range between an Anchor and Tag
 status = self.pozyx.doRanging(anchor_id, device_range, tag_id)
 if status == POZYX_SUCCESS:
   print("Range =",device_range.distance,"detected at",device_range.timestamp,"ms")
+
 # Getting range between Master and Slave Tags
 status = self.pozyx.doRanging(slave_tag_id, device_range, None)
 if status == POZYX_SUCCESS:
@@ -114,10 +116,13 @@ if status == POZYX_SUCCESS:
 7. Get other sensor information:
 ```
 # Set remote_id to a tags id if you want sensor information from that tag
+
 orientation = EulerAngles()
-acceleration = Acceleration()
 pozyx.getEulerAngles_deg(orientation, remote_id=None)
+
+acceleration = Acceleration()
 pozyx.getAcceleration_mg(acceleration, remote_id=None)
+
 print("Orientation: %s, acceleration: %s" % (str(orientation), str(acceleration))
 ```
 Continue the same process above to get temperature, magnetometer, pressure, other sensor information. See the [pypozyx docs](https://pypozyx.readthedocs.io/en/develop/pypozyx_api/index.html) for the available getter functions.
@@ -127,6 +132,7 @@ Continue the same process above to get temperature, magnetometer, pressure, othe
  if status != PZYX_SUCCESS:
     error_code = SingleRegister()
     status = self.pozyx.getErrorCode(error_code)
+    
     if status == POZYX_SUCCESS:
         print("ERROR Ranging, local %s" %
         self.pozyx.getErrorMessage(error_code))
