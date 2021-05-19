@@ -65,9 +65,11 @@ The following are various important lines of code and what they do:
 1. Connecting your code to the pozyx software in python:
 ```
 serial_port = get_first_pozyx_serial_port()
+
 if serial_port is None:
     print("No Pozyx connected. Check your USB cable or your driver!")
     quit()
+
 pozyx = PozyxSerial(serial_port)
 ```
 2. Find what pozyx devices are connected to the Master tag and what their respective id's are:
@@ -79,17 +81,20 @@ if pozyx.doDiscovery(discovery_type=PozyxConstants.DISCOVERY_ALL_DEVICES) == POZ
 3. Add anchors or tags to the Master Tag:
 ```
 pozyx.clearDevices()
+
 # For adding tags
 tag_id = 0x007 # some hex number relating to the added device found in part 2
 pozyx.addDevice(DeviceCoordinates(tag_id,1,Coordinates(0,0,0)))
+
 # For adding anchors
 anchor_id = 0x008
 pozyx.addDevice(DeviceCoordinates(anchor_id,0,Coordinates(0,0,0)))
 ```
 5. Add anchors to a slave tag:
 ```
-slave_tag_id = 0x007
+slave_tag_id = 0x007 # I just wrote random hex numbers for device id's. You Need to know the actual id of this device (see step 2)
 pozyx.clearDevices(remote_id=slave_tag_id)
+
 # For adding anchors
 anchor_id = 0x008
 pozyx.addDevice(DeviceCoordinates(anchor_id,0,Coordinates(0,0,0)),remote_id=slave_tag_id)
