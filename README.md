@@ -5,7 +5,7 @@
 * [Software Installation](#software-installation)
 * [Hardware Setup](#faq)
 * [Example Test Case](#known-bugs)
-* [Other Questions](https://pozyx.io/)
+* [Questions](#questions)
 
 ## Requirements
 * [Ubuntu 18.04](https://ubuntu.com/download/desktop)
@@ -51,3 +51,9 @@ git clone https://github.com/chadrs2/pozyx.git
 
 ------------
 
+## Important Links
+* [POZYX Main Website](https://pozyx.io/)
+* [PYPOZYX Docs](https://pypozyx.readthedocs.io/en/develop/)
+* [POZYX Python Guide](https://docs.pozyx.io/creator/latest/python)
+
+------------
