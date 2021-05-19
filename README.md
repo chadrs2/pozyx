@@ -39,7 +39,10 @@ Since Tags can already get ranges from Anchors, that ability can then be utilize
 cd ~
 git clone https://github.com/chadrs2/pozyx.git
 ```
-2. Install pozyx's [Companion Software](https://pozyx.io/products-and-services/creator-controller)
+2. Install pypozyx:
+```pip3 install pypozyx``` or ```python3 -m pip install pypozyx```
+
+3. Install pozyx's [Companion Software](https://pozyx.io/products-and-services/creator-controller)
 
 ## Hardware Setup
 
