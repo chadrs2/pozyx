@@ -8,23 +8,12 @@ import time
 
 from pypozyx.lib import Device
 
-import pickle
-
-class Tag2AnchorDistance():
-    def __init__(self,pozyx,remote_id,anchor_id):        
+class TagsDistance():
+    def __init__(self,pozyx,remote_id):        
         self.pozyx = pozyx
-
-        # Clear all anchors connected to remote id tag
-        self.pozyx.clearDevices(remote_id=remote_id)
-        
-        # Add anchor(s) to remote device
-        anchor1 = DeviceCoordinates(anchor_id,0,Coordinates(0,0,0))
-        self.pozyx.addDevice(anchor1,remote_id)
 
         # State Variables
         self.remote_id = remote_id
-        self.anchor_id = anchor_id
-        self.anchor1 = anchor1
         self.device_range = DeviceRange()
         self.prev_time = None
         self.max_rate = None
@@ -38,7 +27,7 @@ class Tag2AnchorDistance():
     def run(self):
         self.device_range = DeviceRange()
         status = self.pozyx.doRanging(
-            self.anchor_id, self.device_range, self.remote_id)
+            destination_id=self.remote_id, device_range=self.device_range, remote_id=None)
         if self.init_time is None:
             self.init_time = self.device_range.timestamp
         if status == POZYX_SUCCESS:
@@ -76,7 +65,7 @@ class Tag2AnchorDistance():
         fig = plt.figure(1)
         # plt.plot(t/1000,distance_values/1000)
         plt.scatter(t/1000,distance_values/1000,marker=".")
-        plt.title("1 Tag to 1 Anchor: Max Distance Test")
+        plt.title("2 Tags: Max Distance Test")
         plt.xlabel("Time (s)")
         plt.ylabel("Distance (m)")
         plt.text(1,1,'Max Sampling Rate: {}'.format(round(self.max_rate,2)))
@@ -116,56 +105,20 @@ if __name__ == "__main__":
     
     # Device ID Config
     remote_id = 0x7607                 # remote tag device network ID
-    anchor1_id = 0x7612                  # anchor device network ID
     
     pozyx = PozyxSerial(serial_port)
 
-    # Change UWB settings:
-    ''' HOW TO CHANGE UWB SETTINGS:
-    ## Set the Pozyx's UWB settings.
-    # If using this remotely, remember to change the local UWB settings as well
-    # to make sure you are still able to communicate with the remote device.
-    # Max Range :=: channel := 2(optimal); bitrate := 0(lower); plen := 0x0c(i.e. 4096 symbols)(higher)
-    # Max Rate :=: channel := 5(high); bitrate := 2(higher); plen := 0x08(i.e. 1024 symbols)(lower)  
-    uwb_settings = UWBSettings(channel=5, bitrate=1, prf=2, plen=0x08, gain_db=25.0)
-    pozyx.setUWBSettings(self, uwb_settings, remote_id=None, save_to_flash=False)
-
-    BITRATES = {0: '110 kbit/s', 1: '850 kbit/s', 2: '6.81 Mbit/s'}
-    PRFS = {1: '16 MHz', 2: '64 MHz'}
-    PREAMBLE_LENGTHS = {0x0C: '4096 symbols', 0x28: '2048 symbols', 0x18: '1536 symbols', 0x08: '1024 symbols',
-                 0x34: '512 symbols', 0x24: '256 symbols', 0x14: '128 symbols', 0x04: '64 symbols'}
-
-    # assume an anchor 0x6038 that we want to add to the device list and immediately save the device list after.
-    anchor = DeviceCoordinates(0x6038, 0, Coordinates(5000, 5000, 0))
-    pozyx.addDevice(anchor)
-    pozyx.saveNetwork()
-
-    ## Saving Writable Register Data
-    # Saves the device list used for positioning
-    pozyx.saveNetwork()
-    # Saves the device's UWB settings
-    pozyx.saveUWBSettings()
-    '''
     # # Configure Network
-    # uwb_settings = UWBSettings(channel=5,bitrate=0,prf=2,plen=0x08,gain_db=11.5)
-    # status = pozyx.setUWBSettings(uwb_settings=uwb_settings,remote_id=remote_id)
-    # status &= pozyx.setUWBSettings(uwb_settings=uwb_settings)
-    # pozyx.doDiscoveryAnchors()
-
-    # # pozyx.clearDevices(remote_id)
-    # # pozyx.clearDevices()
-    # # pozyx.addDevice(DeviceCoordinates(remote_id,1,Coordinates(0,0,0)))
-    # anchor = DeviceCoordinates(anchor1_id, 0, Coordinates(0,0,0))
-    # pozyx.addDevice(anchor,remote_id=remote_id)
-    # anchor = DeviceCoordinates(anchor1_id, 0, Coordinates(0,0,0))
-    # pozyx.addDevice(anchor)
-    # #pozyx.saveNetwork()
+    pozyx.clearDevices(remote_id)
+    pozyx.clearDevices()
+    pozyx.addDevice(DeviceCoordinates(remote_id,1,Coordinates(0,0,0)))
+    # pozyx.saveNetwork()
     
     # Change Settings    
     # uwb_settings = UWBSettings(channel=5,bitrate=0,prf=2,plen=0x08,gain_db=11.5)
-    # uwb_settings = UWBSettings(channel=2,bitrate=0,prf=2,plen=0x08,gain_db=15.5)
-    # status = pozyx.setUWBSettings(uwb_settings=uwb_settings,remote_id=remote_id)
-    # status &= pozyx.setUWBSettings(uwb_settings=uwb_settings)
+    uwb_settings = UWBSettings(channel=2,bitrate=0,prf=2,plen=0x0C,gain_db=15.5)
+    status = pozyx.setUWBSettings(uwb_settings=uwb_settings,remote_id=remote_id)
+    status &= pozyx.setUWBSettings(uwb_settings=uwb_settings)
     #pozyx.saveUWBSettings()
     #pozyx.saveUWBSettings(remote_id)
 
@@ -188,14 +141,15 @@ if __name__ == "__main__":
         quit()
     
     
-    t2a = Tag2AnchorDistance(pozyx,remote_id,anchor1_id)
+    td = TagsDistance(pozyx,remote_id)
     try:
         while True:
-            t2a.run()
-            # print(len(t2a.list_of_dist))
-            # if len(t2a.list_of_dist) == 100:
-            #     t2a.stats()
+            td.run()
+            # print(len(td.list_of_dist))
+            # if len(td.list_of_dist) == 100:
+            #     td.stats()
             #     break
+            # time.sleep(1/15)
     except KeyboardInterrupt:
         pass
     
@@ -211,4 +165,4 @@ if __name__ == "__main__":
     obj = pickle.load(f)
     f.close()
     '''
-    t2a.plot()
+    td.plot()
