@@ -10,8 +10,6 @@
 ## Requirements
 * [Ubuntu 18.04](https://ubuntu.com/download/desktop)
 * [Git](https://git-scm.com/download/linux)
-### Additional Requirements for Rover Computer
-* [ZED SDK](https://www.stereolabs.com/developers/release/)
 
 ----------
 
