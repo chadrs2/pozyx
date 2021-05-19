@@ -135,16 +135,57 @@ Continue the same process above to get temperature, magnetometer, pressure, othe
     
     if status == POZYX_SUCCESS:
         print("ERROR Ranging, local %s" %
-        self.pozyx.getErrorMessage(error_code))
+            self.pozyx.getErrorMessage(error_code))
     else:
         print("ERROR Ranging, couldn't retrieve local error")
 ```
-9. Other helpful code files relating to changing and updating UWB settings (this is really important to get better max ranges!!):
-They can all be found in [this](https://github.com/pozyxLabs/Pozyx-Python-library/tree/master/useful) github folder from pypozyx.
+9. **Other helpful code files relating to changing and updating UWB settings (this is really important to get better max ranges!!):
+They can all be found in [this](https://github.com/pozyxLabs/Pozyx-Python-library/tree/master/useful) github folder from pypozyx.**
 
 
 ------------
 
 ## Full Example Range Test
+In this example, just assume that the anchor ID is 0x712 and the tag ID is 0x7607
+```
+from pypozyx import *
+
+if __name__ == '__main__':
+    serial_port = get_first_pozyx_serial_port()
+
+    if serial_port is None:
+        print("No Pozyx connected. Check your USB cable or your driver!")
+        quit()
+
+    pozyx = PozyxSerial(serial_port)
+    
+    # Device ID Config
+    remote_id = 0x7607      # remote tag device network ID
+    anchor_id = 0x7612     # anchor device network ID
+
+    # Add tag and anchor to master
+    pozyx.clearDevices()
+    pozyx.addDevice(DeviceCoordinates(remote_id,1,Coordinates(0,0,0)))
+    pozyx.addDevice(DeviceCoordinates(anchor_id,0,Coordinates(0,0,0)))
+    
+    # Add anchor to remote tag
+    pozyx.clearDevices(remote_id)
+    pozyx.addDevice(DeviceCoordinates(anchor_id,0,Coordinates(0,0,0)),remote_id)
+    
+    # Get range measurement between remote tag and anchor
+    range_meas = DeviceRange()
+    status = pozyx.doRanging(anchor_id,range_meas,remote_id)
+    
+    if status == POZYX_SUCCESS:
+        print("Range =",device_range.distance,"detected at",device_range.timestamp,"ms")
+    else:
+        error_code = SingleRegister()
+        status = self.pozyx.getErrorCode(error_code)
+        if status == POZYX_SUCCESS:
+            print("ERROR Ranging, local %s" %
+                self.pozyx.getErrorMessage(error_code))
+        else:
+            print("ERROR Ranging, couldn't retrieve local error")
+```
 
 ------------
