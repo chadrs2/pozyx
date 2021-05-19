@@ -1,17 +1,24 @@
 # POZYX UWB SENSORS
 
 ## Contents
+* [Important Links](#important-links)
 * [Overview](#set-up-a-base-station-or-personal-computer)
 * [Software Installation](#software-installation)
 * [Hardware Setup](#faq)
 * [Example Test Case](#known-bugs)
-* [Important Links](#important-links)
 
 ## Requirements
 * [Ubuntu 18.04](https://ubuntu.com/download/desktop)
 * [Git](https://git-scm.com/download/linux)
 
 ----------
+
+## Important Links
+* [POZYX Main Website](https://pozyx.io/)
+* [PYPOZYX Docs](https://pypozyx.readthedocs.io/en/develop/)
+* [POZYX Python Guide](https://docs.pozyx.io/creator/latest/python)
+
+------------
 
 ## Overview
 
@@ -51,12 +58,5 @@ git clone https://github.com/chadrs2/pozyx.git
 
 ## Example Test Case
 
-
-------------
-
-## Important Links
-* [POZYX Main Website](https://pozyx.io/)
-* [PYPOZYX Docs](https://pypozyx.readthedocs.io/en/develop/)
-* [POZYX Python Guide](https://docs.pozyx.io/creator/latest/python)
 
 ------------
