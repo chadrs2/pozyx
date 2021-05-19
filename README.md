@@ -24,7 +24,7 @@
 The purpose of UWB sensors in the GPS denied convoy problem is to provide accurate range measurements between immediate neighboring vehicles. 
 These range measurements provide information for longitudinal and lateral control. 
 They can also be utilized for correctly updating our path planning algorithms in convoy scenarios.
-Through review of a variety of UWB sensors, [POZYX's](see https://pozyx.io/) UWB sensors have been chosen.
+Through review of a variety of UWB sensors, [POZYX's](https://pozyx.io/) UWB sensors have been chosen.
 
 This readme has been made to help any first time user understand what pozyx is, how we are using the sensors for our convoy application, and how to personally start getting range measurements from a few sensors.
 
