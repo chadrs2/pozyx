@@ -1,7 +1,6 @@
 # POZYX UWB SENSORS
 
 ## Contents
-* [Important Links](#important-links)
 * [Overview](#set-up-a-base-station-or-personal-computer)
 * [Software Installation](#software-installation)
 * [Hardware Setup](#faq)
@@ -10,8 +9,6 @@
 ## Requirements
 * [Ubuntu 18.04](https://ubuntu.com/download/desktop)
 * [Git](https://git-scm.com/download/linux)
-
-----------
 
 ## Important Links
 * [POZYX Main Website](https://pozyx.io/)
